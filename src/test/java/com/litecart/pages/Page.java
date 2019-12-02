@@ -1,6 +1,7 @@
 package com.litecart.pages;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.*;
 import org.openqa.selenium.support.*;
 import org.openqa.selenium.support.ui.*;
 
@@ -25,7 +26,8 @@ public class Page {
     @FindBy(xpath = "//button[text()=\"Confirm Order\"]")
     private WebElement cartConfirmOrderButton;
 
-    private By productsList = By.xpath("//section[@class=\"listing products\"]");
+    @FindBy(xpath = "//section[@class=\"listing products\"]")
+    private WebElement productsList;
 
     public Page(WebDriver driver) {
         this.driver = driver;
@@ -62,16 +64,36 @@ public class Page {
     }
 
     /**
+     * Maximize window to full screen.
+     */
+    public void maximizeWindow() {
+        driver.manage().window().maximize();
+    }
+
+    /**
      * Open category page by name.
      *
      * @param categoryName category name (for example 'Rubber Ducks')
      */
     public void openCategories(String categoryName) {
         // Scroll page to 'section' web element
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", categoriesTree);
+        moveToElement(categoriesTree);
+
+        // Wait for 'section' web element to be visible
         categoriesTree.findElement(By.partialLinkText(categoryName)).click();
+
         // Wait for all products list page to be loaded
-        wait.until(ExpectedConditions.visibilityOfElementLocated(productsList));
+        wait.until(ExpectedConditions.visibilityOf(productsList));
+    }
+
+    /**
+     * Scroll page to web element.
+     *
+     * @param element WebElement to show.
+     */
+    void moveToElement(WebElement element) {
+        Actions actions = new Actions(driver);
+        actions.moveToElement(element).perform();
     }
 
     /**

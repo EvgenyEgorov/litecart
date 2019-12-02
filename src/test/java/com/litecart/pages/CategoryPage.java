@@ -29,6 +29,7 @@ public class CategoryPage extends Page {
         for (WebElement item : items) {
             if (name.equals(item.getText())) {
                 isItemFound = true;
+                moveToElement(item);
                 item.click();
                 break;
             }

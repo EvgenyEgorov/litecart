@@ -34,6 +34,7 @@ public class TestLiteCart {
     public void testCreateOrder() {
         Page homePage = new Page(driver);
         homePage.openURL("http://localhost/litecart/");
+        homePage.maximizeWindow();
 
         // Open category "Rubber Ducks"
         homePage.openCategories("Rubber Ducks");
